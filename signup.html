@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .bg {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+    line-height: 1.6;
+    color: #333;
+    background-image:url(bg.webp);
+    background-image: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+        }
+
+        .signup-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .signup-header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .signup-header p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 40px 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #4a90e2;
+            outline: none;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 38px;
+            cursor: pointer;
+            color: #777;
+            font-size: 18px;
+        }
+
+        .password-requirements {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .signup-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .signup-button:hover {
+            background-color: #357ab8;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .login-link a {
+            color: #4a90e2;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 20px;
+                margin: 0 15px;
+            }
+        }
+    </style>
+    <!-- Font Awesome for eye icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg">
+    <div class="signup-container">
+        <div class="signup-header">
+            <h1>Create Account</h1>
+            <p>Join us today! Fill out the form below to get started.</p>
+        </div>
+
+        <form id="signupForm" action="#" method="POST">
+            <div class="form-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a password" required>
+                <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                <p class="password-requirements">Use 8 or more characters with a mix of letters, numbers & symbols</p>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
+                <p id="password-error" class="error-message">Passwords do not match!</p>
+            </div>
+
+            <button type="submit" class="signup-button">Sign Up</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="index.html">Log in</a>
+        </div>
+    </div>
+
+    <script>
+        // Toggle password visibility
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirm-password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        toggleConfirmPassword.addEventListener('click', function() {
+            const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+            confirmPassword.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
+        // Password match validation
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorMessage = document.getElementById('password-error');
+            
+            if (password !== confirmPassword) {
+                errorMessage.style.display = 'block';
+                document.getElementById('confirm-password').style.borderColor = '#ff4444';
+                return;
+            } else {
+                errorMessage.style.display = 'none';
+                document.getElementById('confirm-password').style.borderColor = '#ddd';
+            }
+            
+            const fullName = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            
+            alert(`Thank you for signing up, ${fullName}!`);
+        });
+
+        // Real-time password matching check
+        document.getElementById('confirm-password').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            const errorMessage = document.getElementById('password-error');
+            
+            if (password !== confirmPassword && confirmPassword !== '') {
+                errorMessage.style.display = 'block';
+                this.style.borderColor = '#ff4444';
+            } else {
+                errorMessage.style.display = 'none';
+                this.style.borderColor = '#ddd';
+            }
+        });
+    </script>
+</body>
+</html>
